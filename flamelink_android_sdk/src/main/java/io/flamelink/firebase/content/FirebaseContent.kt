@@ -5,12 +5,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.flamelink.common.interfaces.CommonContent
 import io.flamelink.common.interfaces.FlamelinkCallBack
+import io.flamelink.common.interfaces.FlamelinkListCallback
 import io.flamelink.common.types.ContentType
 import io.flamelink.firebase.settings.CacheSettings
 
 class FirebaseContent : CommonContent {
 
-    override fun getByField(fieldName: String, callBack: FlamelinkCallBack) {
+    override fun getByField(fieldName: String, callBack: FlamelinkListCallback) {
         val contentVEL = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val listResponse: MutableList<Any?> = emptyList<Any>().toMutableList()
@@ -25,7 +26,7 @@ class FirebaseContent : CommonContent {
                         }
                     }
                 }
-                callBack.onAsyncListResponse(listResponse)
+                callBack.response(listResponse)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -33,10 +34,10 @@ class FirebaseContent : CommonContent {
         CommonContent.contentRef.environment().addListenerForSingleValueEvent(contentVEL)
     }
 
-    override fun get(contentItem: String, callBack: FlamelinkCallBack) {
+    override fun get(contentItem: String, callBack: FlamelinkListCallback) {
         val contentVEL = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                callBack.onAsyncListResponse(dataSnapshot.children.map {
+                callBack.response(dataSnapshot.children.map {
                     if (contentItem.isBlank()) {
                         it.child(CacheSettings.locale).value
                     } else it.value

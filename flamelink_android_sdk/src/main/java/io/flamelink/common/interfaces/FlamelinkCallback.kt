@@ -7,3 +7,7 @@ interface FlamelinkCallBack {
 
     fun <T> onAsyncResponse(response: T)
 }
+
+interface FlamelinkListCallback {
+    fun <T> response(response: List<T>)
+}

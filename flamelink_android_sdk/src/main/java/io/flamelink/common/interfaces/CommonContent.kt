@@ -13,7 +13,7 @@ interface CommonContent{
 
     fun DatabaseReference.environment() = this.child(CacheSettings.environment).child("content")
 
-    fun get(contentItem: String, callBack: FlamelinkCallBack)
+    fun get(contentItem: String, callBack: FlamelinkListCallback)
 
-    fun getByField(fieldName: String, callBack: FlamelinkCallBack)
+    fun getByField(fieldName: String, callBack: FlamelinkListCallback)
 }
